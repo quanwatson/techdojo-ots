@@ -32,3 +32,8 @@ venv/
 
 # n8n exports may embed credentials inline
 *credentials.json
+
+# Obsidian: per-machine UI state (keep plugins/settings, drop workspace churn)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
