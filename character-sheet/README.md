@@ -22,14 +22,27 @@ character-sheet/
   - You can also drag an image file onto any frame.
 - **Palette swatches** (under the profile) are color pickers.
 - Your edits save automatically in this browser. To move them to another computer, use
-  **Export ▸ Save project (.json)** and **Open project (.json)**. Uploaded images are stored inside that file.
+  **File ▸ Save project (.json)** and **Open project (.json)**. Uploaded images are stored inside that file.
+
+## Use it as a template
+
+The sheet comes filled in with a sample character so you can see what goes where.
+
+- **File ▸ New blank character** clears every image, description and swatch. It keeps the layout, section titles,
+  captions and profile labels, so you only fill in the blanks (each image box shows **+ Add image**).
+- **Profile rows:** use **+ Add profile row** to add fields such as *Name*, *Age* or *Species*. Hover over a row and
+  click ✕ to remove it. Empty rows are left out of the AI prompt.
+- **Rename anything:** section titles and captions are editable too. Rename *Expression sheet* or *Hands clasped*
+  to whatever fits your character.
+- Save each character as its own project file (**File ▸ Save project**). You can reopen it later or start the next one from blank.
+- **File ▸ Reset to sample character** brings back the original example.
 
 ## Export
 
 | Button | You get | Use it for |
 |---|---|---|
-| Export ▸ **PDF** | The print dialog, sized to the sheet. Pick **Save as PDF** and turn on *Background graphics*. | Sharing or printing |
-| Export ▸ **PNG** | One high-resolution image of the whole sheet | A single reference image |
+| File ▸ **PDF** | The print dialog, sized to the sheet. Pick **Save as PDF** and turn on *Background graphics*. | Sharing or printing |
+| File ▸ **PNG** | One high-resolution image of the whole sheet | A single reference image |
 | **AI prompt / Seedance pack** | An editable prompt, plus `prompt.md`, `character.json`, and a **.zip** | Seedance and other video/image models |
 
 The AI pack `.zip` contains:
@@ -45,7 +58,7 @@ For Seedance, upload the face and turnaround images (or `sheet.png`) as referenc
 ## Edit it in VS Code
 
 - **Change a default image:** replace the file in `assets/` with the same name, or change the `src` in `index.html`.
-- **Change default text:** edit it in `index.html`. Every editable element has a `data-k="..."` key, and each key must be unique.
+- **Change default text:** edit it in `index.html`. Profile rows are the `<dt>`/`<dd>` pairs. Every other editable element has a `data-k="..."` key, and each key must be unique.
 - **Add an image slot:** copy a `<figure class="slot" data-id="...">` block and give it a new `data-id` and `data-k`.
 - After you edit `index.html`, the page loads the new template, not your old browser edits.
   The old edits are kept in a backup in browser storage.

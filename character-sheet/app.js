@@ -13,6 +13,7 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const sheet = $("#sheet");
   const STORE_KEY = "charsheet:v1:" + location.pathname;
+  const BLANK_SWATCH = "#cfd1cc"; // swatches still at this value are treated as "not set"
   const MAX_EDGE = 1600; // uploaded images are downscaled to this many px on the long edge
 
   const ICON = {
@@ -59,8 +60,10 @@
   const textEls = $$("[data-k]", sheet);
   const slots = $$(".slot", sheet);
   const colorEls = $$("input[data-c]", sheet);
+  const profileList = $(".profile-list", sheet);
 
   const defaults = {
+    profile: $$(":scope > div", profileList).map((r) => ({ label: textOf($("dt", r)), value: textOf($("dd", r)) })),
     texts: Object.fromEntries(textEls.map((el) => [el.dataset.k, textOf(el)])),
     images: Object.fromEntries(slots.map((s) => [s.dataset.id, $("img", s).getAttribute("src") || ""])),
     colors: Object.fromEntries(colorEls.map((c) => [c.dataset.c, c.value])),
@@ -69,13 +72,16 @@
   const fingerprint = hash(JSON.stringify(defaults));
 
   // state.images[id]: undefined = template image, "" = removed, "data:..." = uploaded
-  let state = { v: 1, fp: fingerprint, name: projectName(), texts: {}, images: {}, imageNames: {}, fits: {}, colors: {} };
+  // state.profile: undefined = template rows, otherwise [{label, value}]
+  const fresh = (extra = {}) => ({ v: 1, fp: fingerprint, name: "character-sheet", texts: {}, images: {}, imageNames: {}, fits: {}, colors: {}, ...extra });
+  let state = fresh({ name: projectName() });
 
   /* ---------------- text editing ---------------- */
-  textEls.forEach((el) => {
+  function makeEditable(el, onInput) {
+    el.classList.add("ed");
     el.contentEditable = "true";
     el.spellcheck = false;
-    el.addEventListener("input", () => { state.texts[el.dataset.k] = textOf(el); save(); });
+    el.addEventListener("input", () => { onInput(); save(); });
     el.addEventListener("paste", (e) => {
       e.preventDefault();
       const t = (e.clipboardData || window.clipboardData).getData("text/plain");
@@ -83,7 +89,33 @@
     });
     // Enter = new line; Escape leaves the field
     el.addEventListener("keydown", (e) => { if (e.key === "Escape") el.blur(); });
-  });
+  }
+  textEls.forEach((el) => makeEditable(el, () => { state.texts[el.dataset.k] = textOf(el); }));
+
+  /* ---------------- profile rows (add / remove) ---------------- */
+  const readProfile = () => $$(":scope > div", profileList).map((r) => ({ label: textOf($("dt", r)), value: textOf($("dd", r)) }));
+
+  function renderProfile() {
+    profileList.innerHTML = "";
+    (state.profile || defaults.profile).forEach((row) => addProfileRow(row));
+  }
+  function addProfileRow({ label = "", value = "" } = {}, focus = false) {
+    const div = document.createElement("div");
+    div.innerHTML = '<dt data-ph="LABEL:"></dt><dd data-ph="Describe…"></dd><button type="button" class="row-del no-export" title="Remove this row">✕</button>';
+    const [dt, dd] = [$("dt", div), $("dd", div)];
+    setText(dt, label);
+    setText(dd, value);
+    [dt, dd].forEach((el) => makeEditable(el, () => { state.profile = readProfile(); }));
+    $(".row-del", div).addEventListener("click", () => { div.remove(); state.profile = readProfile(); save(); });
+    profileList.appendChild(div);
+    if (focus) dt.focus();
+  }
+  const addRowBtn = document.createElement("button");
+  addRowBtn.type = "button";
+  addRowBtn.className = "add-row no-export";
+  addRowBtn.textContent = "+ Add profile row";
+  addRowBtn.addEventListener("click", () => { addProfileRow({}, true); state.profile = readProfile(); save(); });
+  profileList.after(addRowBtn);
 
   colorEls.forEach((c) => c.addEventListener("input", () => { state.colors[c.dataset.c] = c.value; save(); }));
   $("#projectName").addEventListener("input", () => { state.name = projectName(); save(); });
@@ -201,6 +233,7 @@
       setText(el, k in state.texts ? state.texts[k] : defaults.texts[k]);
     });
     colorEls.forEach((c) => { c.value = state.colors[c.dataset.c] || defaults.colors[c.dataset.c]; });
+    renderProfile();
     slots.forEach(applySlot);
   }
 
@@ -209,7 +242,7 @@
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
-      catch (e) { toast("Browser storage is full — use Export ▸ Save project (.json) to keep your work.", 6000); }
+      catch (e) { toast("Browser storage is full — use File ▸ Save project (.json) to keep your work.", 6000); }
     }, 300);
   }
 
@@ -248,6 +281,7 @@
         imageNames: data.imageNames || {},
         fits: data.fits || {},
         colors: Object.fromEntries(Object.entries(data.colors || {}).filter(([k, v]) => /^#[0-9a-f]{6}$/i.test(v))),
+        profile: Array.isArray(data.profile) ? data.profile.map((r) => ({ label: String(r?.label ?? ""), value: String(r?.value ?? "") })) : undefined,
       };
       applyState();
       save();
@@ -257,11 +291,26 @@
     }
   });
   $("#btnReset").addEventListener("click", () => {
-    if (!confirm("Reset every text and image back to the template? (Save a project file first if you want to keep this version.)")) return;
-    state = { v: 1, fp: fingerprint, name: "character-sheet", texts: {}, images: {}, imageNames: {}, fits: {}, colors: {} };
+    if (!confirm("Reset every text and image back to the sample character? (Save a project file first if you want to keep this version.)")) return;
+    state = fresh();
     applyState();
     save();
-    toast("Reset to template.");
+    toast("Reset to sample character.");
+  });
+  // Blank character: keeps the layout, section titles, captions and profile labels; clears everything else.
+  $("#btnBlank").addEventListener("click", () => {
+    if (!confirm("Start a new blank character? All images and descriptions will be cleared. (Save a project file first if you want to keep this one.)")) return;
+    state = fresh({
+      name: "new-character",
+      // costume/material captions describe the sample outfit, so clear them (placeholders show instead)
+      texts: Object.fromEntries(["notes", ...textEls.map((el) => el.dataset.k).filter((k) => /^(cost|mat)-/.test(k))].map((k) => [k, ""])),
+      profile: defaults.profile.map((r) => ({ label: r.label, value: "" })),
+      images: Object.fromEntries(slots.map((s) => [s.dataset.id, ""])),
+      colors: Object.fromEntries(colorEls.map((c) => [c.dataset.c, BLANK_SWATCH])),
+    });
+    applyState();
+    save();
+    toast("Blank sheet ready. Click the + boxes to add images.");
   });
 
   /* ---------------- menu ---------------- */
@@ -282,7 +331,7 @@
     const ext = (src) => (src.startsWith("data:image/png") ? "png" : src.startsWith("data:image/webp") ? "webp" : src.startsWith("data:image/gif") ? "gif" : src.startsWith("data:image/svg") ? "svg" : src.startsWith("data:") ? "jpg" : (src.split(".").pop().split("?")[0] || "jpg"));
     const profile = $$(".profile-list > div", sheet)
       .map((row) => ({ label: oneLine(textOf($("dt", row))).replace(/:$/, ""), value: oneLine(textOf($("dd", row))) }))
-      .filter((r) => r.label || r.value);
+      .filter((r) => r.value);
     let n = 0;
     const sections = $$("[data-section]", sheet).map((sec) => {
       const title = oneLine(textOf($("h2", sec)));
@@ -296,7 +345,7 @@
       });
       return { title, items };
     });
-    const palette = colorEls.map((c) => c.value);
+    const palette = colorEls.map((c) => c.value).filter((v) => v.toLowerCase() !== BLANK_SWATCH);
     const notesEl = $('[data-k="notes"]', sheet);
     const notes = notesEl ? oneLine(textOf(notesEl)) : "";
     return { name: projectName(), profile, palette, sections, notes };
@@ -305,21 +354,22 @@
   function buildPrompt(d = collect()) {
     const desc = d.profile.map((p) => `${p.label ? cap(p.label) + ": " : ""}${p.value}`).join(". ");
     const mats = (d.sections.find((s) => s.items.some((i) => i.id.startsWith("mat-")))?.items || [])
-      .filter((i) => i.label).map((i) => i.label.toLowerCase()).join("; ");
+      .filter((i) => i.file && i.label).map((i) => i.label.toLowerCase()).join("; ");
     const lines = [];
     lines.push(`# Character reference: ${d.name}`, "");
     lines.push("## Video prompt", "");
     lines.push(
-      `Consistent character across all shots. ${desc}.` +
+      "Consistent character across all shots." + (desc ? ` ${desc}.` : "") +
       (mats ? ` Colors and materials: ${mats}.` : "") +
-      ` Palette: ${d.palette.join(", ")}.` +
-      " Match the attached reference images exactly for face, hairstyle, glasses, outfit, graphics, proportions and skin tone." +
+      (d.palette.length ? ` Palette: ${d.palette.join(", ")}.` : "") +
+      " Match the attached reference images exactly for face, hair, outfit, accessories, proportions and colors." +
       (d.notes ? ` ${d.notes}` : ""),
       ""
     );
     lines.push("## Character profile", "");
     d.profile.forEach((p) => lines.push(`- **${cap(p.label)}:** ${p.value}`));
-    lines.push("", "## Color palette", "", d.palette.map((h) => `\`${h}\``).join(" "), "");
+    lines.push("");
+    if (d.palette.length) lines.push("## Color palette", "", d.palette.map((h) => `\`${h}\``).join(" "), "");
     lines.push("## Reference images", "");
     d.sections.forEach((s) => {
       const imgs = s.items.filter((i) => i.file);
