@@ -32,6 +32,12 @@ The sheet comes filled in with a sample character so you can see what goes where
   captions and profile labels, so you only fill in the blanks (each image box shows **+ Add image**).
 - **Profile rows:** use **+ Add profile row** to add fields such as *Name*, *Age* or *Species*. Hover over a row and
   click ✕ to remove it. Empty rows are left out of the AI prompt.
+- **8. Extended profile:** two columns of detail rows: name, age, height/weight, eyes, personality, mannerisms,
+  voice, role, backstory, signature props, wardrobe notes and what must never change. Use **+ Add detail row** for more.
+  Short details go into the video prompt. Long ones, like backstory, go only into the profile sections of `prompt.md` and `character.json`.
+- **9. Video prompt:** a large box for the scene: action, camera, lighting and style.
+- **10. Negative prompt:** what the model must avoid. It starts with a generic list and is kept when you start a blank character.
+  **Consistency notes** below it are added to the end of the video prompt.
 - **Rename anything:** section titles and captions are editable too. Rename *Expression sheet* or *Hands clasped*
   to whatever fits your character.
 - Save each character as its own project file (**File ▸ Save project**). You can reopen it later or start the next one from blank.
@@ -47,13 +53,13 @@ The sheet comes filled in with a sample character so you can see what goes where
 
 The AI pack `.zip` contains:
 
-- `prompt.md`: a character-consistency video prompt, the profile, the palette, and a list of every image
+- `prompt.md`: the video prompt (your scene plus a character-consistency paragraph), the negative prompt, both profiles, the palette, and a list of every image
 - `character.json`: the same data in structured form (good for LLMs and scripts)
 - `images/NN-<slot>-<caption>.jpg`: every picture as its own file
 - `sheet.png`: the full sheet
 
-For Seedance, upload the face and turnaround images (or `sheet.png`) as reference images. Then paste the
-**Video prompt** paragraph from `prompt.md` and add your shot or action description.
+For Seedance, upload the face and turnaround images (or `sheet.png`) as reference images. Then use **Copy video prompt** and
+**Copy negative prompt** in the *AI prompt* dialog to paste each into its own field.
 
 ## Edit it in VS Code
 

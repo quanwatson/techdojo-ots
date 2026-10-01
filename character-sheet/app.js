@@ -60,10 +60,11 @@
   const textEls = $$("[data-k]", sheet);
   const slots = $$(".slot", sheet);
   const colorEls = $$("input[data-c]", sheet);
-  const profileList = $(".profile-list", sheet);
+  const listEls = $$("dl[data-list]", sheet);
+  const readList = (dl) => $$(":scope > div", dl).map((r) => ({ label: textOf($("dt", r)), value: textOf($("dd", r)) }));
 
   const defaults = {
-    profile: $$(":scope > div", profileList).map((r) => ({ label: textOf($("dt", r)), value: textOf($("dd", r)) })),
+    lists: Object.fromEntries(listEls.map((dl) => [dl.dataset.list, readList(dl)])),
     texts: Object.fromEntries(textEls.map((el) => [el.dataset.k, textOf(el)])),
     images: Object.fromEntries(slots.map((s) => [s.dataset.id, $("img", s).getAttribute("src") || ""])),
     colors: Object.fromEntries(colorEls.map((c) => [c.dataset.c, c.value])),
@@ -72,8 +73,8 @@
   const fingerprint = hash(JSON.stringify(defaults));
 
   // state.images[id]: undefined = template image, "" = removed, "data:..." = uploaded
-  // state.profile: undefined = template rows, otherwise [{label, value}]
-  const fresh = (extra = {}) => ({ v: 1, fp: fingerprint, name: "character-sheet", texts: {}, images: {}, imageNames: {}, fits: {}, colors: {}, ...extra });
+  // state.lists[name]: undefined = template rows, otherwise [{label, value}]
+  const fresh = (extra = {}) => ({ v: 1, fp: fingerprint, name: "character-sheet", texts: {}, images: {}, imageNames: {}, fits: {}, colors: {}, lists: {}, ...extra });
   let state = fresh({ name: projectName() });
 
   /* ---------------- text editing ---------------- */
@@ -93,29 +94,33 @@
   textEls.forEach((el) => makeEditable(el, () => { state.texts[el.dataset.k] = textOf(el); }));
 
   /* ---------------- profile rows (add / remove) ---------------- */
-  const readProfile = () => $$(":scope > div", profileList).map((r) => ({ label: textOf($("dt", r)), value: textOf($("dd", r)) }));
-
-  function renderProfile() {
-    profileList.innerHTML = "";
-    (state.profile || defaults.profile).forEach((row) => addProfileRow(row));
+  // Works for every <dl data-list="..."> on the sheet (core profile + extended profile).
+  function renderLists() {
+    listEls.forEach((dl) => {
+      dl.innerHTML = "";
+      (state.lists[dl.dataset.list] || defaults.lists[dl.dataset.list]).forEach((row) => addRow(dl, row));
+    });
   }
-  function addProfileRow({ label = "", value = "" } = {}, focus = false) {
+  function addRow(dl, { label = "", value = "" } = {}, focus = false) {
     const div = document.createElement("div");
     div.innerHTML = '<dt data-ph="LABEL:"></dt><dd data-ph="Describe…"></dd><button type="button" class="row-del no-export" title="Remove this row">✕</button>';
     const [dt, dd] = [$("dt", div), $("dd", div)];
     setText(dt, label);
     setText(dd, value);
-    [dt, dd].forEach((el) => makeEditable(el, () => { state.profile = readProfile(); }));
-    $(".row-del", div).addEventListener("click", () => { div.remove(); state.profile = readProfile(); save(); });
-    profileList.appendChild(div);
+    const sync = () => { state.lists[dl.dataset.list] = readList(dl); };
+    [dt, dd].forEach((el) => makeEditable(el, sync));
+    $(".row-del", div).addEventListener("click", () => { div.remove(); sync(); save(); });
+    dl.appendChild(div);
     if (focus) dt.focus();
   }
-  const addRowBtn = document.createElement("button");
-  addRowBtn.type = "button";
-  addRowBtn.className = "add-row no-export";
-  addRowBtn.textContent = "+ Add profile row";
-  addRowBtn.addEventListener("click", () => { addProfileRow({}, true); state.profile = readProfile(); save(); });
-  profileList.after(addRowBtn);
+  listEls.forEach((dl) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "add-row no-export";
+    btn.textContent = dl.dataset.add || "+ Add row";
+    btn.addEventListener("click", () => { addRow(dl, {}, true); state.lists[dl.dataset.list] = readList(dl); save(); });
+    dl.after(btn);
+  });
 
   colorEls.forEach((c) => c.addEventListener("input", () => { state.colors[c.dataset.c] = c.value; save(); }));
   $("#projectName").addEventListener("input", () => { state.name = projectName(); save(); });
@@ -233,7 +238,7 @@
       setText(el, k in state.texts ? state.texts[k] : defaults.texts[k]);
     });
     colorEls.forEach((c) => { c.value = state.colors[c.dataset.c] || defaults.colors[c.dataset.c]; });
-    renderProfile();
+    renderLists();
     slots.forEach(applySlot);
   }
 
@@ -281,7 +286,9 @@
         imageNames: data.imageNames || {},
         fits: data.fits || {},
         colors: Object.fromEntries(Object.entries(data.colors || {}).filter(([k, v]) => /^#[0-9a-f]{6}$/i.test(v))),
-        profile: Array.isArray(data.profile) ? data.profile.map((r) => ({ label: String(r?.label ?? ""), value: String(r?.value ?? "") })) : undefined,
+        lists: Object.fromEntries(Object.entries(data.lists || (Array.isArray(data.profile) ? { core: data.profile } : {}))
+          .filter(([k, v]) => Array.isArray(v))
+          .map(([k, v]) => [k, v.map((r) => ({ label: String(r?.label ?? ""), value: String(r?.value ?? "") }))])),
       };
       applyState();
       save();
@@ -303,8 +310,9 @@
     state = fresh({
       name: "new-character",
       // costume/material captions describe the sample outfit, so clear them (placeholders show instead)
-      texts: Object.fromEntries(["notes", ...textEls.map((el) => el.dataset.k).filter((k) => /^(cost|mat)-/.test(k))].map((k) => [k, ""])),
-      profile: defaults.profile.map((r) => ({ label: r.label, value: "" })),
+      // the negative prompt is generic, so it is kept as a starting point
+      texts: Object.fromEntries(["notes", "scene-prompt", ...textEls.map((el) => el.dataset.k).filter((k) => /^(cost|mat)-/.test(k))].map((k) => [k, ""])),
+      lists: Object.fromEntries(Object.entries(defaults.lists).map(([k, rows]) => [k, rows.map((r) => ({ label: r.label, value: "" }))])),
       images: Object.fromEntries(slots.map((s) => [s.dataset.id, ""])),
       colors: Object.fromEntries(colorEls.map((c) => [c.dataset.c, BLANK_SWATCH])),
     });
@@ -329,9 +337,11 @@
   /* ---------------- structured data for AI tools ---------------- */
   function collect() {
     const ext = (src) => (src.startsWith("data:image/png") ? "png" : src.startsWith("data:image/webp") ? "webp" : src.startsWith("data:image/gif") ? "gif" : src.startsWith("data:image/svg") ? "svg" : src.startsWith("data:") ? "jpg" : (src.split(".").pop().split("?")[0] || "jpg"));
-    const profile = $$(".profile-list > div", sheet)
-      .map((row) => ({ label: oneLine(textOf($("dt", row))).replace(/:$/, ""), value: oneLine(textOf($("dd", row))) }))
-      .filter((r) => r.value);
+    const rows = (name) => {
+      const dl = $(`dl[data-list="${name}"]`, sheet);
+      return dl ? readList(dl).map((r) => ({ label: oneLine(r.label).replace(/:$/, ""), value: oneLine(r.value) })).filter((r) => r.value) : [];
+    };
+    const field = (k) => { const el = $(`[data-k="${k}"]`, sheet); return el ? textOf(el).trim() : ""; };
     let n = 0;
     const sections = $$("[data-section]", sheet).map((sec) => {
       const title = oneLine(textOf($("h2", sec)));
@@ -346,29 +356,40 @@
       return { title, items };
     });
     const palette = colorEls.map((c) => c.value).filter((v) => v.toLowerCase() !== BLANK_SWATCH);
-    const notesEl = $('[data-k="notes"]', sheet);
-    const notes = notesEl ? oneLine(textOf(notesEl)) : "";
-    return { name: projectName(), profile, palette, sections, notes };
+    return {
+      name: projectName(), profile: rows("core"), details: rows("details"), palette, sections,
+      notes: oneLine(field("notes")), scene: field("scene-prompt"), negative: oneLine(field("negative")),
+    };
   }
 
-  function buildPrompt(d = collect()) {
-    const desc = d.profile.map((p) => `${p.label ? cap(p.label) + ": " : ""}${p.value}`).join(". ");
+  // Short details go into the video prompt; long ones (backstory etc.) stay in the profile sections.
+  function characterParagraph(d) {
+    const facts = [...d.profile, ...d.details.filter((r) => r.value.length <= 160)]
+      .map((p) => `${p.label ? cap(p.label) + ": " : ""}${p.value}`).join(". ");
     const mats = (d.sections.find((s) => s.items.some((i) => i.id.startsWith("mat-")))?.items || [])
       .filter((i) => i.file && i.label).map((i) => i.label.toLowerCase()).join("; ");
-    const lines = [];
-    lines.push(`# Character reference: ${d.name}`, "");
-    lines.push("## Video prompt", "");
-    lines.push(
-      "Consistent character across all shots." + (desc ? ` ${desc}.` : "") +
+    return "Consistent character across all shots." + (facts ? ` ${facts}.` : "") +
       (mats ? ` Colors and materials: ${mats}.` : "") +
       (d.palette.length ? ` Palette: ${d.palette.join(", ")}.` : "") +
       " Match the attached reference images exactly for face, hair, outfit, accessories, proportions and colors." +
-      (d.notes ? ` ${d.notes}` : ""),
-      ""
-    );
+      (d.notes ? ` ${d.notes}` : "");
+  }
+  // The text to paste into the video model's prompt field: the scene, then the character lock.
+  const videoPrompt = (d = collect()) => [d.scene, characterParagraph(d)].filter(Boolean).join("\n\n");
+
+  function buildPrompt(d = collect()) {
+    const lines = [];
+    lines.push(`# Character reference: ${d.name}`, "");
+    lines.push("## Video prompt", "", videoPrompt(d), "");
+    if (d.negative) lines.push("## Negative prompt", "", d.negative, "");
     lines.push("## Character profile", "");
     d.profile.forEach((p) => lines.push(`- **${cap(p.label)}:** ${p.value}`));
     lines.push("");
+    if (d.details.length) {
+      lines.push("## Extended profile", "");
+      d.details.forEach((p) => lines.push(`- **${cap(p.label)}:** ${p.value}`));
+      lines.push("");
+    }
     if (d.palette.length) lines.push("## Color palette", "", d.palette.map((h) => `\`${h}\``).join(" "), "");
     lines.push("## Reference images", "");
     d.sections.forEach((s) => {
@@ -378,7 +399,7 @@
       imgs.forEach((i) => lines.push(`- \`${i.file}\` — ${cap(i.label)}`));
       lines.push("");
     });
-    if (d.notes) lines.push("## Notes", "", d.notes, "");
+    if (d.notes) lines.push("## Consistency notes", "", d.notes, "");
     return lines.join("\n");
   }
   function cap(s) { s = s.toLowerCase(); return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -389,14 +410,18 @@
       name: d.name,
       generated: new Date().toISOString(),
       profile: d.profile,
+      extended_profile: d.details,
       palette: d.palette,
-      notes: d.notes,
+      scene_prompt: d.scene,
+      video_prompt: videoPrompt(d),
+      negative_prompt: d.negative,
+      consistency_notes: d.notes,
       reference_images: d.sections.map((s) => ({
         section: s.title,
         images: s.items.filter((i) => i.file).map((i) => ({ id: i.id, label: i.label, file: i.file })),
       })).filter((s) => s.images.length),
       sheet_image: "sheet.png",
-      prompt: prompt || buildPrompt(d),
+      full_markdown: prompt || buildPrompt(d),
     }, null, 2);
   }
 
@@ -404,9 +429,19 @@
   const dlg = $("#promptDialog");
   const promptBox = $("#promptText");
   $("#btnPrompt").addEventListener("click", () => { promptBox.value = buildPrompt(); dlg.showModal(); });
-  $("#dlgCopy").addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(promptBox.value); toast("Prompt copied."); }
-    catch (e) { promptBox.select(); document.execCommand("copy"); toast("Prompt copied."); }
+  async function copy(text, what) {
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) {
+      const t = document.createElement("textarea");
+      t.value = text; dlg.appendChild(t); t.select(); document.execCommand("copy"); t.remove();
+    }
+    toast(`${what} copied.`);
+  }
+  $("#dlgCopy").addEventListener("click", () => copy(promptBox.value, "Everything"));
+  $("#dlgCopyPrompt").addEventListener("click", () => copy(videoPrompt(), "Video prompt"));
+  $("#dlgCopyNeg").addEventListener("click", () => {
+    const n = collect().negative;
+    n ? copy(n, "Negative prompt") : toast("The negative prompt box is empty.");
   });
   $("#dlgMd").addEventListener("click", () => download("prompt.md", promptBox.value, "text/markdown"));
   $("#dlgJson").addEventListener("click", () => download(`${fileBase()}.character.json`, characterJson(promptBox.value), "application/json"));

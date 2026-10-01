@@ -55,7 +55,7 @@
     <div class="cell profile" data-section>
       <h2 data-k="s1-title">1. CHARACTER PROFILE</h2>
       <!-- Profile rows: add/remove in the browser, or edit these defaults here. -->
-      <dl class="profile-list">
+      <dl class="profile-list" data-list="core" data-add="+ Add profile row">
         <div><dt>TYPE:</dt><dd>Adult man</dd></div>
         <div><dt>BUILD:</dt><dd>Medium</dd></div>
         <div><dt>ATTIRE:</dt><dd>Sage green hoodie<br>and matching shorts</dd></div>
@@ -155,11 +155,41 @@
     </div>
   </section>
 
-  <!-- Optional notes block: included in the AI prompt. Delete the text to hide it. -->
-  <section class="row row-notes">
+  <!-- ROW 5 : extended profile (add / remove rows in the browser) -->
+  <section class="row row-details">
     <div class="cell">
-      <h2 data-k="notes-title">NOTES FOR VIDEO GENERATION</h2>
-      <p class="notes" data-k="notes" data-ph="Anything the video model should always keep or avoid (lighting, style, props)…">Keep the character's face, hair, outfit, accessories and colors identical in every shot. Clean, evenly lit studio background.</p>
+      <h2 data-k="s8-title">8. EXTENDED PROFILE</h2>
+      <dl class="profile-list details-list" data-list="details" data-add="+ Add detail row">
+        <div><dt>NAME:</dt><dd></dd></div>
+        <div><dt>AGE:</dt><dd></dd></div>
+        <div><dt>HEIGHT / WEIGHT:</dt><dd></dd></div>
+        <div><dt>SKIN TONE:</dt><dd>Warm brown</dd></div>
+        <div><dt>EYES:</dt><dd></dd></div>
+        <div><dt>DISTINGUISHING FEATURES:</dt><dd>Round gold metal glasses, mustache and goatee, sharp lined-up hairline</dd></div>
+        <div><dt>PERSONALITY:</dt><dd></dd></div>
+        <div><dt>MANNERISMS / BODY LANGUAGE:</dt><dd>Calm, grounded stance; often clasps hands in front</dd></div>
+        <div><dt>VOICE:</dt><dd></dd></div>
+        <div><dt>ROLE IN STORY:</dt><dd></dd></div>
+        <div><dt>BACKSTORY:</dt><dd></dd></div>
+        <div><dt>SIGNATURE PROPS:</dt><dd></dd></div>
+        <div><dt>WARDROBE NOTES:</dt><dd>Back print reads "Take the Chance win it All" with dice; two dice on the front pocket; camo-pattern shorts; black/gray high-top sneakers with red accents</dd></div>
+        <div><dt>MUST NEVER CHANGE:</dt><dd>Face, glasses, facial hair, hoodie color and graphics</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ROW 6 : prompt + negative prompt (both go into the AI pack) -->
+  <section class="row row-prompt">
+    <div class="cell">
+      <h2 data-k="s9-title">9. VIDEO PROMPT</h2>
+      <div class="field-label" data-k="prompt-label">SCENE · ACTION · CAMERA · LIGHTING · STYLE</div>
+      <div class="field-box big" data-k="scene-prompt" data-ph="Describe the shot: where the character is, what they do, camera movement, lighting, mood, style, duration…">The character walks toward the camera down a quiet, sunlit city sidewalk, stops, looks up and gives a slow confident smile. Medium shot, smooth dolly-in, golden-hour light, shallow depth of field, cinematic and realistic.</div>
+    </div>
+    <div class="cell">
+      <h2 data-k="s10-title">10. NEGATIVE PROMPT</h2>
+      <div class="field-box" data-k="negative" data-ph="What the model must avoid…">different face, changing outfit or colors, missing or different glasses, wrong graphic text, extra fingers, distorted hands or limbs, extra people, blurry, low quality, flicker, watermark, captions, logos</div>
+      <h2 class="sub" data-k="notes-title">CONSISTENCY NOTES</h2>
+      <div class="field-box" data-k="notes" data-ph="Anything the video model should always keep or avoid (lighting, style, props)…">Keep the character's face, hair, outfit, accessories and colors identical in every shot. Clean, evenly lit studio background for reference shots.</div>
     </div>
   </section>
 </article>
@@ -174,10 +204,12 @@
     </header>
     <p class="dlg-help">Generated from the sheet. Edit freely before copying. The <b>AI pack</b> zip contains this prompt as
       <code>prompt.md</code>, structured data as <code>character.json</code>, every image as a separate file in <code>images/</code>,
-      and the full sheet as <code>sheet.png</code> — upload the images as reference images and paste the prompt.</p>
+      and the full sheet as <code>sheet.png</code>. Upload the images as reference images, then paste the video prompt and negative prompt into their fields.</p>
     <textarea id="promptText" spellcheck="false"></textarea>
     <footer>
-      <button type="button" id="dlgCopy">Copy prompt</button>
+      <button type="button" id="dlgCopyPrompt">Copy video prompt</button>
+      <button type="button" id="dlgCopyNeg">Copy negative prompt</button>
+      <button type="button" id="dlgCopy">Copy all</button>
       <button type="button" id="dlgMd">Download prompt.md</button>
       <button type="button" id="dlgJson">Download character.json</button>
       <button type="button" id="dlgZip" class="primary">Download AI pack (.zip)</button>
