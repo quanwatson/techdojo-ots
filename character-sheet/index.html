@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Character Sheet Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ TOOLBAR (hidden in PDF / PNG exports) ============ -->
+<header class="toolbar no-export">
+  <div class="tb-left">
+    <strong class="brand">Character Sheet Builder</strong>
+    <label class="name-field">Project name
+      <input id="projectName" type="text" value="character-sheet" spellcheck="false">
+    </label>
+  </div>
+  <div class="tb-right">
+    <span class="hint">Click any text to edit · hover an image to swap it</span>
+    <button id="btnPrompt" class="primary">AI prompt / Seedance pack</button>
+    <div class="menu">
+      <button class="menu-btn">Export ▾</button>
+      <div class="menu-list">
+        <button id="btnPdf">PDF (Save as PDF)</button>
+        <button id="btnPng">PNG image of the sheet</button>
+        <button id="btnZip">AI pack (.zip: prompt + JSON + images)</button>
+        <hr>
+        <button id="btnSave">Save project (.json)</button>
+        <button id="btnLoad">Open project (.json)</button>
+        <hr>
+        <button id="btnReset" class="danger">Reset to template</button>
+      </div>
+    </div>
+  </div>
+  <input id="projectFile" type="file" accept=".json,application/json" hidden>
+</header>
+
+<main class="stage">
+<!-- ===================================================================
+     THE SHEET
+     - Any element with data-k is editable text (the key is used for saving).
+     - Any <figure class="slot"> is a swappable image. Change src to point
+       at a different file in /assets if you want a new default image.
+     =================================================================== -->
+<article id="sheet" class="sheet">
+
+  <!-- ROW 1 : profile + turnaround -->
+  <section class="row row-1">
+    <div class="cell profile" data-section>
+      <h2 data-k="s1-title">1. CHARACTER PROFILE</h2>
+      <dl class="profile-list">
+        <div><dt data-k="p1-l">TYPE:</dt><dd data-k="p1-v">Adult man</dd></div>
+        <div><dt data-k="p2-l">BUILD:</dt><dd data-k="p2-v">Medium</dd></div>
+        <div><dt data-k="p3-l">ATTIRE:</dt><dd data-k="p3-v">Sage green hoodie<br>and matching shorts</dd></div>
+        <div><dt data-k="p4-l">ACCESSORIES:</dt><dd data-k="p4-v">Round metal glasses, watch, white crew socks, black sneakers</dd></div>
+        <div><dt data-k="p5-l">HAIR:</dt><dd data-k="p5-v">Close, neat haircut</dd></div>
+        <div><dt data-k="p6-l">FACIAL HAIR:</dt><dd data-k="p6-v">Mustache and goatee</dd></div>
+      </dl>
+      <div class="swatches" title="Click a swatch to change its color">
+        <label><input type="color" data-c="c1" value="#7f9c87"></label>
+        <label><input type="color" data-c="c2" value="#5c7562"></label>
+        <label><input type="color" data-c="c3" value="#ececec"></label>
+        <label><input type="color" data-c="c4" value="#303134"></label>
+        <label><input type="color" data-c="c5" value="#a6704a"></label>
+        <label><input type="color" data-c="c6" value="#121212"></label>
+      </div>
+    </div>
+
+    <div class="cell" data-section>
+      <h2 data-k="s2-title">2. FULL-BODY TURNAROUND</h2>
+      <div class="grid g-turn">
+        <figure class="slot" data-id="turn-front"><div class="frame"><img src="assets/turn-front.jpg" alt=""></div><figcaption data-k="turn-front">FRONT</figcaption></figure>
+        <figure class="slot" data-id="turn-34"><div class="frame"><img src="assets/turn-34.jpg" alt=""></div><figcaption data-k="turn-34">3/4 VIEW</figcaption></figure>
+        <figure class="slot" data-id="turn-side"><div class="frame"><img src="assets/turn-side.jpg" alt=""></div><figcaption data-k="turn-side">SIDE VIEW</figcaption></figure>
+        <figure class="slot" data-id="turn-back"><div class="frame"><img src="assets/turn-back.jpg" alt=""></div><figcaption data-k="turn-back">BACK VIEW</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROW 2 : face + expressions -->
+  <section class="row row-2">
+    <div class="cell" data-section>
+      <h2 data-k="s3-title">3. FACE AND IDENTITY DETAILS</h2>
+      <div class="grid g-face">
+        <figure class="slot" data-id="face-front"><div class="frame"><img src="assets/face-front.jpg" alt=""></div><figcaption data-k="face-front">FRONT</figcaption></figure>
+        <figure class="slot" data-id="face-profile"><div class="frame"><img src="assets/face-profile.jpg" alt=""></div><figcaption data-k="face-profile">PROFILE</figcaption></figure>
+        <figure class="slot" data-id="face-34"><div class="frame"><img src="assets/face-34.jpg" alt=""></div><figcaption data-k="face-34">3/4 VIEW</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="cell" data-section>
+      <h2 data-k="s4-title">4. EXPRESSION SHEET</h2>
+      <div class="grid g-expr">
+        <figure class="slot" data-id="expr-neutral"><div class="frame"><img src="assets/expr-neutral.jpg" alt=""></div><figcaption data-k="expr-neutral">NEUTRAL</figcaption></figure>
+        <figure class="slot" data-id="expr-happy"><div class="frame"><img src="assets/expr-happy.jpg" alt=""></div><figcaption data-k="expr-happy">HAPPY</figcaption></figure>
+        <figure class="slot" data-id="expr-angry"><div class="frame"><img src="assets/expr-angry.jpg" alt=""></div><figcaption data-k="expr-angry">ANGRY</figcaption></figure>
+        <figure class="slot" data-id="expr-sad"><div class="frame"><img src="assets/expr-sad.jpg" alt=""></div><figcaption data-k="expr-sad">SAD</figcaption></figure>
+        <figure class="slot" data-id="expr-surprised"><div class="frame"><img src="assets/expr-surprised.jpg" alt=""></div><figcaption data-k="expr-surprised">SURPRISED</figcaption></figure>
+        <figure class="slot" data-id="expr-worried"><div class="frame"><img src="assets/expr-worried.jpg" alt=""></div><figcaption data-k="expr-worried">WORRIED</figcaption></figure>
+        <figure class="slot" data-id="expr-confident"><div class="frame"><img src="assets/expr-confident.jpg" alt=""></div><figcaption data-k="expr-confident">CONFIDENT</figcaption></figure>
+        <figure class="slot" data-id="expr-determined"><div class="frame"><img src="assets/expr-determined.jpg" alt=""></div><figcaption data-k="expr-determined">DETERMINED</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROW 3 : poses -->
+  <section class="row row-3">
+    <div class="cell" data-section>
+      <h2 data-k="s5-title">5. POSE AND BODY LANGUAGE</h2>
+      <div class="grid g-pose">
+        <figure class="slot" data-id="pose-neutral"><div class="frame"><img src="assets/pose-neutral.jpg" alt=""></div><figcaption data-k="pose-neutral">NEUTRAL STANDING</figcaption></figure>
+        <figure class="slot" data-id="pose-walking"><div class="frame"><img src="assets/pose-walking.jpg" alt=""></div><figcaption data-k="pose-walking">WALKING</figcaption></figure>
+        <figure class="slot" data-id="pose-sitting"><div class="frame"><img src="assets/pose-sitting.jpg" alt=""></div><figcaption data-k="pose-sitting">SITTING</figcaption></figure>
+        <figure class="slot" data-id="pose-relaxed"><div class="frame"><img src="assets/pose-relaxed.jpg" alt=""></div><figcaption data-k="pose-relaxed">RELAXED</figcaption></figure>
+        <figure class="slot" data-id="pose-clasped"><div class="frame"><img src="assets/pose-clasped.jpg" alt=""></div><figcaption data-k="pose-clasped">HANDS CLASPED</figcaption></figure>
+        <figure class="slot" data-id="pose-leaning"><div class="frame"><img src="assets/pose-leaning.jpg" alt=""></div><figcaption data-k="pose-leaning">LEANING FORWARD</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROW 4 : costume + materials -->
+  <section class="row row-4">
+    <div class="cell" data-section>
+      <h2 data-k="s6-title">6. COSTUME DETAILS</h2>
+      <div class="grid g-cost-a">
+        <figure class="slot" data-id="cost-hood"><div class="frame"><img src="assets/cost-hood.jpg" alt=""></div><figcaption data-k="cost-hood">HOOD AND COLLAR</figcaption></figure>
+        <figure class="slot" data-id="cost-frontgfx"><div class="frame"><img src="assets/cost-frontgfx.jpg" alt=""></div><figcaption data-k="cost-frontgfx">FRONT GRAPHIC</figcaption></figure>
+        <figure class="slot" data-id="cost-backgfx"><div class="frame"><img src="assets/cost-backgfx.jpg" alt=""></div><figcaption data-k="cost-backgfx">BACK GRAPHIC</figcaption></figure>
+      </div>
+      <div class="grid g-cost-b">
+        <figure class="slot" data-id="cost-shorts"><div class="frame"><img src="assets/cost-shorts.jpg" alt=""></div><figcaption data-k="cost-shorts">SHORTS PATTERN</figcaption></figure>
+        <figure class="slot" data-id="cost-sneaker"><div class="frame"><img src="assets/cost-sneaker.jpg" alt=""></div><figcaption data-k="cost-sneaker">SNEAKER DETAIL</figcaption></figure>
+        <figure class="slot" data-id="cost-sock"><div class="frame"><img src="assets/cost-sock.jpg" alt=""></div><figcaption data-k="cost-sock">SOCK DETAIL</figcaption></figure>
+        <figure class="slot" data-id="cost-glasses"><div class="frame"><img src="assets/cost-glasses.jpg" alt=""></div><figcaption data-k="cost-glasses">GLASSES DETAIL</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="cell" data-section>
+      <h2 data-k="s7-title">7. COLOR AND MATERIAL PALETTE</h2>
+      <div class="grid g-mat">
+        <figure class="slot" data-id="mat-hoodie"><div class="frame"><img src="assets/mat-hoodie.jpg" alt=""></div><figcaption data-k="mat-hoodie">HOODIE FABRIC<br>(SAGE GREEN)</figcaption></figure>
+        <figure class="slot" data-id="mat-shorts"><div class="frame"><img src="assets/mat-shorts.jpg" alt=""></div><figcaption data-k="mat-shorts">SHORTS FABRIC<br>(PATTERN)</figcaption></figure>
+        <figure class="slot" data-id="mat-print"><div class="frame"><img src="assets/mat-print.jpg" alt=""></div><figcaption data-k="mat-print">PRINT / SOCKS<br>(WHITE)</figcaption></figure>
+        <figure class="slot" data-id="mat-sneaker"><div class="frame"><img src="assets/mat-sneaker.jpg" alt=""></div><figcaption data-k="mat-sneaker">SNEAKER MATERIAL<br>(BLACK/GRAY)</figcaption></figure>
+        <figure class="slot" data-id="mat-skin"><div class="frame"><img src="assets/mat-skin.jpg" alt=""></div><figcaption data-k="mat-skin">SKIN TONE<br>(WARM BROWN)</figcaption></figure>
+        <figure class="slot" data-id="mat-hair"><div class="frame"><img src="assets/mat-hair.jpg" alt=""></div><figcaption data-k="mat-hair">HAIR COLOR<br>(DARK BROWN)</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Optional notes block: included in the AI prompt. Delete the text to hide it. -->
+  <section class="row row-notes">
+    <div class="cell">
+      <h2 data-k="notes-title">NOTES FOR VIDEO GENERATION</h2>
+      <p class="notes" data-k="notes">Keep the face, haircut, glasses, outfit, dice graphics and colors identical in every shot. Natural daylight, clean studio background.</p>
+    </div>
+  </section>
+</article>
+</main>
+
+<!-- ============ AI PROMPT DIALOG ============ -->
+<dialog id="promptDialog" class="no-export">
+  <form method="dialog" class="dlg">
+    <header>
+      <h3>AI prompt &amp; Seedance pack</h3>
+      <button value="close" class="x" aria-label="Close">✕</button>
+    </header>
+    <p class="dlg-help">Generated from the sheet. Edit freely before copying. The <b>AI pack</b> zip contains this prompt as
+      <code>prompt.md</code>, structured data as <code>character.json</code>, every image as a separate file in <code>images/</code>,
+      and the full sheet as <code>sheet.png</code> — upload the images as reference images and paste the prompt.</p>
+    <textarea id="promptText" spellcheck="false"></textarea>
+    <footer>
+      <button type="button" id="dlgCopy">Copy prompt</button>
+      <button type="button" id="dlgMd">Download prompt.md</button>
+      <button type="button" id="dlgJson">Download character.json</button>
+      <button type="button" id="dlgZip" class="primary">Download AI pack (.zip)</button>
+    </footer>
+  </form>
+</dialog>
+
+<div id="toast" class="toast no-export" role="status"></div>
+<input id="imageFile" type="file" accept="image/*" hidden>
+
+<!-- Export helpers (bundled locally so everything works offline) -->
+<script src="vendor/html2canvas.min.js" defer></script>
+<script src="vendor/jszip.min.js" defer></script>
+<script src="app.js" defer></script>
+</body>
+</html>
