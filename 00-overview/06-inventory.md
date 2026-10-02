@@ -10,6 +10,7 @@ This is a quick, human-readable snapshot of the core assets in the lab. Serials,
 - Primary authoring / remote desktop: Dell OptiPlex 3080
 - Virtualization host: Lenovo ThinkCentre M720s (Proxmox VE planned)
 - Thin client / terminal: Raspberry Pi (role still TBD)
+- Production host (cloud): Hostinger KVM 8 VPS `ttw-core`, runs every site and service on `techtheworld.win`. See `06-compute/hosts/kvm8-rig/`.
 
 ## Network infrastructure
 - Firewall / router: repurposed Untangle hardware, running pfSense
