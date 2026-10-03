@@ -93,7 +93,7 @@ The **owner repo** decides the content; this repo decides how the service runs. 
 | 8 | `finds.` | Consignment marketplace | Public | techdojo-ots | Odoo website | (Odoo) | Postgres `odoo` |
 | 9 | `live.` | Live and hybrid shops | Public | techdojo-ots | Odoo website + POS | (Odoo) | Postgres `odoo` |
 | 10 | `wear.` | Clothing shop (**on hold**: see `NETWORK-PLAN.md`) | Public | to decide | Odoo website | (Odoo) | Postgres `odoo` |
-| 10a | `alamode.` | A La Mode showcase (lookbook; nothing for sale) | Public | aLaMode-kb | Static, Caddy | (Caddy) | none |
+| 10a | `alamode.` | A La Mode showcase (collections, mock boutique, atelier customiser; nothing for sale) | Public | aLaMode-kb | Static, Caddy | (Caddy) | none |
 | 11 | `learn.` | Archive and courses (all four areas) | Public | shared; each area supplies its courses | Odoo eLearning + video host | (Odoo) | Postgres `odoo` |
 | 12 | `maps.` | AP public data dashboard | Public | the-ap-project | Static MapLibre + Martin tiles | 512 MB | Postgres `apgis` (public schema only) |
 | 13 | `gis.` | AP team map (private layers) | Team | the-ap-project | Static MapLibre + Martin tiles | (shared) | Postgres `apgis` |

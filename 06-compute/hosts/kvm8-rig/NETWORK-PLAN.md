@@ -48,7 +48,7 @@ Status: plan only. Nothing here is built yet. See *Still to confirm* at the end.
 | 15 | **EFV Sound**: streaming, physical sales and artist releases (see *The realms*) | `sound.techtheworld.win` | Anyone; subscribers for full-length hi-res streams |
 | 16 | **EFV Games**: browser games, demo downloads, mods and community | `games.techtheworld.win` | Anyone |
 | 17 | **EFV Film**: the project showcase | `film.techtheworld.win` | Anyone; pitch decks on request |
-| 18 | **A La Mode showcase**: a lookbook of A La Mode's collections, built from `aLaMode-kb`; nothing is for sale | `alamode.techtheworld.win` | Anyone |
+| 18 | **A La Mode showcase**: A La Mode's collections, a mock luxury boutique and an atelier customiser (2D and 3D), built from `aLaMode-kb`. Nothing can be bought; requests go to the atelier by contact | `alamode.techtheworld.win` | Anyone |
 | — | **Landing page**: the interactive solar system | `techtheworld.win` and `www.` | Anyone |
 
 ### The landing page: a living solar system
