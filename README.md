@@ -1,5 +1,7 @@
 # HomeLab — Network, Systems, and Solutions Architecture Lab
 
+**Focus area:** Technology · ♅ Uranus. The map of all the focus areas is in `06-compute/hosts/kvm8-rig/VENTURES-PLAN.md`.
+
 ## Overview
 
 This repo documents a homelab I built to develop real skills in networking, systems administration, security, and solutions architecture — not just to have a pile of gear running in a closet.

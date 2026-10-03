@@ -1,13 +1,30 @@
-# Four areas, one server: venture plan
+# The focus areas, one server: venture plan
 
-The KVM 8 at `techtheworld.win` is a working business platform for four areas. In each one you already have a knowledge base and real skills:
+## The focus areas
+
+These are the core projects and ventures being explored, each with its planet, following the traditional occult correspondences. **Earth** and **Pluto** were chosen by the owner; the rest are matched to their classical meanings.
+
+| # | Focus area | Planet | Why that planet | Where it lives | Projects tagged to it |
+|---|---|---|---|---|---|
+| 1 | **Technology** | ♅ Uranus | Invention, electricity, networks, sudden breakthroughs | `techdojo-ots` | The homelab and its runbooks; the KVM 8 rig; the Training Control Center; Ogun Tech Solutions services (managed IT, vCIO, hosted apps, IT training); `dash.` and `status.` |
+| 2 | **Enterprise & economics** | ♃ Jupiter | Wealth, expansion, commerce, good fortune | No repo of its own yet: this plan, plus Odoo on the rig | Odoo back office (`erp.`) for every company; the Ogun Tech shop (`shop.`), the consignment marketplace (`finds.`), live and hybrid shops (`live.`); Stripe; Library subscriptions and the blank-copy licence; the entities, money and contracts below |
+| 3 | **Mass comm & media** | ☿ Mercury | The messenger: writing, broadcasting, publishing, signals | `efv-kb` | The EFV Library and Media Writing Hub with its production apps and ComfyUI workflows; EFV Sound, EFV Film (Ordo Mentis: 7+1, The Island I Promised You) and EFV Games; the EFV website (`efv.`); EFV Tools (`tools.`); production packages and AI production services; the `techtheworld.win` universe |
+| 4 | **Creative arts & fashion** | ♀ Venus | Beauty, art, adornment, design | `aLaMode-kb` (+ the brand kit in `efv-kb`) | A La Mode: the learning path, the collections, the showcase, the 3D maison and the atelier customiser; the EFV Noir design system and the EFV Warlord typeface |
+| A | **National affairs & development** | ☉ Sun | Sovereignty, leadership, the centre a people organise around | `the-ap-project` | The governance-design track: the charter and stakeholder seat, the SOS 13+1 trust model, the five zones, the Transition Committee, the modernised Green Book, the legal pathways (home rule, incorporation, land trusts, federal routes) and the capital concepts |
+| B | **Urban planning & development** | ♄ Saturn | Structure, building, boundaries, land and time: the master builder | `the-ap-project` | The planning track: the territory profile, zoning concept, phasing roadmap and site-analysis method; the GIS library, the ten priority maps and the PostGIS geodatabase (`maps.`, `gis.`); the Cities: Skylines II digital twin; GIS and site-report services |
+| C | **Human advocacy** | 🜨 Earth (Gaia) | Owner's choice: care for the living world and its people | `the-ap-project` | Cahokia heritage and tribal consultation; the environment and public-health and equity layers (floodplain, brownfields, environmental justice); the public data dashboard; community engagement; education and heritage content; community land trusts |
+| — | **Self-mastery** (private) | ♇ Pluto | Owner's choice: transformation, depth, rebirth | Private: no repo and no public site | Not tracked here |
+
+Planets not yet used, if an area needs a second: ☽ Moon (the public, memory, cycles), ♂ Mars (defence, drive; an alternative for national affairs), ♆ Neptune (film, music, dreams; a natural second for mass comm & media).
+
+## The knowledge bases
 
 | Area | Knowledge base | What it already holds |
 |---|---|---|
-| **Mass comm and creative arts** | `efv-kb` | The EFV Library: the Media Writing Hub, 15 production apps, 56 ComfyUI workflows, scripts and departments |
-| **Fashion** | `aLaMode-kb` | A La Mode's idea → sketch → pattern → muslin → sample workflow, with Seamly2D, Inkscape, Ink/Stitch and Blender, and machine runbooks |
+| **Mass comm & media** (and the EFV side of creative arts) | `efv-kb` | The EFV Library: the Media Writing Hub, 15 production apps, 56 ComfyUI workflows, scripts and departments |
+| **Creative arts & fashion** | `aLaMode-kb` | A La Mode's idea → sketch → pattern → muslin → sample workflow, with Seamly2D, Inkscape, Ink/Stitch and Blender, and machine runbooks |
 | **Technology** | `techdojo-ots` (Ogun Tech Solutions) | A documented homelab (Proxmox, segmentation, runbooks, change control), an Odoo control-plane runbook, and a 36-month Solutions Architect + vCIO track |
-| **Geopolitical land development** | `the-ap-project` | The AP Base planning record for the American Bottom: GIS library, ten priority maps, capital and governance concepts, and a Cities: Skylines II digital twin |
+| **A · B · C** | `the-ap-project` | The AP Base planning record for the American Bottom: GIS library, ten priority maps, capital and governance concepts, and a Cities: Skylines II digital twin |
 
 This plan picks **real business models** for three of the areas (A La Mode is a learning studio and showcase, not a business), says what each one needs from the server, and orders them so the first ones can earn while the slower ones grow. Prices are starting points to test against competitors, not guarantees. This is a planning document, not legal, tax or financial advice.
 
