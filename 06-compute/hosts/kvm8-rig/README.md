@@ -17,5 +17,5 @@ Each area repo has its own runbook for what it puts on the rig:
 | Repo | Runbook |
 |---|---|
 | `efv-kb` | `deploy/KVM8-RUNBOOK.md` |
-| `alamode-kb` | `stack/kvm8/RUNBOOK.md` |
+| `aLaMode-kb` | `stack/kvm8/RUNBOOK.md` |
 | `the-ap-project` | `operations/kvm8/RUNBOOK.md` |

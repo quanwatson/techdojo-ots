@@ -4,7 +4,7 @@
 **Scope:** The whole host: base OS, edge, data layer, management zone, deploy pipeline, Odoo, n8n, and the sites that the four area repositories put on it
 **Phase:** Rig phases 0–16 (below). Start at Phase 0.
 **Change Type:** Planned / Non-disruptive (new host; nothing in production yet)
-**Applies To:** `ttw-core` (the KVM 8), the `techtheworld.win` Cloudflare zone, the four area repos: `techdojo-ots`, `efv-kb`, `alamode-kb`, `the-ap-project`
+**Applies To:** `ttw-core` (the KVM 8), the `techtheworld.win` Cloudflare zone, the four area repos: `techdojo-ots`, `efv-kb`, `aLaMode-kb`, `the-ap-project`
 
 This is the recipe for building the host, one phase at a time. Each phase follows this repo's runbook format: preconditions, procedure, validation, rollback. Don't start a phase until the previous phase's validation passes. Log every phase in `01-logs/change-control.md` before you start it and in `01-logs/build-journal.md` when it's done. Record each significant decision as an ADR in `18-solutions-architecture-adrs/`.
 
@@ -91,8 +91,9 @@ The **owner repo** decides the content; this repo decides how the service runs. 
 | 6 | `erp.` | Odoo back office | Team | techdojo-ots | Odoo Community | 6 GB | Postgres `odoo` |
 | 7 | `shop.` | Ogun Tech Solutions store + EFV merch | Public | techdojo-ots | Odoo website | (Odoo) | Postgres `odoo` |
 | 8 | `finds.` | Consignment marketplace | Public | techdojo-ots | Odoo website | (Odoo) | Postgres `odoo` |
-| 9 | `live.` | Live and hybrid shops | Public | techdojo-ots (A La Mode drops too) | Odoo website + POS | (Odoo) | Postgres `odoo` |
-| 10 | `wear.` | Clothing and pattern shop | Public | alamode-kb | Odoo website | (Odoo) | Postgres `odoo` |
+| 9 | `live.` | Live and hybrid shops | Public | techdojo-ots | Odoo website + POS | (Odoo) | Postgres `odoo` |
+| 10 | `wear.` | Clothing shop (**on hold**: see `NETWORK-PLAN.md`) | Public | to decide | Odoo website | (Odoo) | Postgres `odoo` |
+| 10a | `alamode.` | A La Mode showcase (lookbook; nothing for sale) | Public | aLaMode-kb | Static, Caddy | (Caddy) | none |
 | 11 | `learn.` | Archive and courses (all four areas) | Public | shared; each area supplies its courses | Odoo eLearning + video host | (Odoo) | Postgres `odoo` |
 | 12 | `maps.` | AP public data dashboard | Public | the-ap-project | Static MapLibre + Martin tiles | 512 MB | Postgres `apgis` (public schema only) |
 | 13 | `gis.` | AP team map (private layers) | Team | the-ap-project | Static MapLibre + Martin tiles | (shared) | Postgres `apgis` |
@@ -116,7 +117,7 @@ The rule: **the area repos own content and builds; this repo owns the host and h
 |---|---|---|---|
 | `techdojo-ots` (this) | this file | the host, `infra/`, Odoo (all companies), n8n, monitoring, backups, `dash.`, `status.`, Ogun Tech's shop content | — |
 | `efv-kb` | `deploy/KVM8-RUNBOOK.md` | static builds for `kb.`, `tools.`, the landing page and realms; the Library API; WordPress theme and content for `efv.`; EFV's Odoo data (merch, Sound physical, courses) | hosts, Access apps, a `library` database, R2 buckets for Sound audio and Games downloads, the deploy hook |
-| `alamode-kb` | `stack/kvm8/RUNBOOK.md` | Odoo data for the A La Mode company (products, variants, Manufacturing routes, pattern downloads), `wear.` website content, courses for `learn.` | the A La Mode company in Odoo, the `wear.` website, an R2 bucket for pattern files, n8n flows |
+| `aLaMode-kb` | `stack/kvm8/RUNBOOK.md` | a static lookbook build for `alamode.` | the `alamode.` host, a read-only deploy key, Git LFS in the deploy step, an n8n post when a collection goes live |
 | `the-ap-project` | `operations/kvm8/RUNBOOK.md` | the PostGIS schema and loader, public-layer exports, the `maps.` and `gis.` web maps, AP Odoo data (services, courses) | an `apgis` database with PostGIS, Martin, two hosts (one public, one team), QGIS access over Tailscale, the deploy hook |
 
 ### The deploy contract
@@ -156,7 +157,7 @@ Every area repo that ships to the rig adds one file at its root, `kvm8.json`, so
    - `admins`: your GitHub username;
    - `dash-guests`: emails, maintained by hand, each with an expiry date.
 5. **R2:**
-   - create the buckets `ttw-backups`, `efv-sound-media`, `efv-games-downloads`, `alamode-patterns`;
+   - create the buckets `ttw-backups`, `efv-sound-media`, `efv-games-downloads`;
    - create an API token scoped to those buckets (Object Read & Write);
    - store the access key, secret and S3 endpoint in the password manager.
 6. **Transactional email:** pick a sending provider for Odoo, n8n and sign-in links, for example Brevo, Postmark, Resend or Amazon SES. Hostinger VPSs commonly restrict outbound port 25, so send on 587. Then:
@@ -582,7 +583,7 @@ Also:
    - create the `odoo` database with demo data **off**;
    - set the language and the timezone America/Chicago;
    - in Settings, set `web.base.url` to `https://erp.techtheworld.win` and freeze it (`web.base.url.freeze`).
-5. **Multi-company:** enable it; the main company is Ogun Tech Solutions. Add the companies **EFV**, **A La Mode** and **AP Project**. Give each its own:
+5. **Multi-company:** enable it; the main company is Ogun Tech Solutions. Add the companies **EFV** and **AP Project**. A La Mode doesn't sell, so it has no company. Give each its own:
    - logo and address;
    - currency USD;
    - chart of accounts (US);
@@ -604,7 +605,7 @@ Also:
    | `shop.` | Ogun Tech Solutions |
    | `finds.` | Ogun Tech Solutions |
    | `live.` | Ogun Tech Solutions |
-   | `wear.` | A La Mode |
+   | `wear.` | To decide (on hold) |
    | `learn.` | Ogun Tech Solutions (shared catalogue; courses carry their company) |
 
    Leave each website unpublished (behind the coming-soon page) until its area's runbook says it's ready.
@@ -685,7 +686,7 @@ Each area's own chat runs its runbook. This repo's chat only provides what they 
 | Area | From this rig | Done when |
 |---|---|---|
 | **Ogun Tech Solutions** (this repo) | `shop.` catalogue, MSP CRM pipeline, contracts as Odoo products with recurring invoices (Community: manual or scheduled invoices, not Enterprise Subscriptions), `finds.` consignment flow, `live.` POS | A test MSP client is quoted, invoiced and paid; a test consignment item is submitted → picked up → sold → seller payout recorded |
-| **A La Mode** (`alamode-kb`) | `wear.` website live; R2 bucket `alamode-patterns`; n8n pattern-delivery flow | See its runbook |
+| **A La Mode** (`aLaMode-kb`) | `alamode.` static host; Git LFS fetch in `ttw-deploy` for this repo; n8n *new collection* post | See its runbook |
 | **AP Project** (`the-ap-project`) | `apgis` database with PostGIS; Martin on `ttw_public` + `ttw_team` + `ttw_data`; hosts `maps.` (public) and `gis.` (team); QGIS access to `apgis` over Tailscale | See its runbook |
 | **EFV** (`efv-kb`) | Everything in Phase 8; EFV company products in Odoo (merch, Sound physical, courses) | See its runbook |
 
@@ -707,7 +708,7 @@ Each area's own chat runs its runbook. This repo's chat only provides what they 
 **Procedure:**
 
 1. Odoo eLearning on the `learn.` website.
-2. Course categories per area: EFV, A La Mode, Ogun Tech, AP Project.
+2. Course categories per area: EFV, Ogun Tech, AP Project, plus free A La Mode process write-ups if wanted.
 3. Videos are uploaded to the video host and embedded by URL; no video files go on this disk.
 4. Paid courses use the eCommerce checkout.
 5. n8n: course bought → enrol → Discord role.
@@ -797,7 +798,7 @@ This folder is the home of the KVM 8 rig: the rig is managed by Ogun Tech Soluti
 | Repo | Handoff runbook |
 |---|---|
 | `efv-kb` | `deploy/KVM8-RUNBOOK.md` |
-| `alamode-kb` | `stack/kvm8/RUNBOOK.md` |
+| `aLaMode-kb` | `stack/kvm8/RUNBOOK.md` |
 | `the-ap-project` | `operations/kvm8/RUNBOOK.md` |
 
 When an area needs something from the rig (a host, a database, an Access app, an n8n flow), its chat asks for it against the *Who owns what* table above, and this repo's chat makes the change here.

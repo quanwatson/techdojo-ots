@@ -9,7 +9,7 @@ The KVM 8 at `techtheworld.win` is a working business platform for four areas. I
 | **Technology** | `techdojo-ots` (Ogun Tech Solutions) | A documented homelab (Proxmox, segmentation, runbooks, change control), an Odoo control-plane runbook, and a 36-month Solutions Architect + vCIO track |
 | **Geopolitical land development** | `the-ap-project` | The AP Base planning record for the American Bottom: GIS library, ten priority maps, capital and governance concepts, and a Cities: Skylines II digital twin |
 
-This plan picks **real business models** for each area, says what each one needs from the server, and orders them so the first ones can earn while the slower ones grow. Prices are starting points to test against competitors, not guarantees. This is a planning document, not legal, tax or financial advice.
+This plan picks **real business models** for three of the areas (A La Mode is a learning studio and showcase, not a business), says what each one needs from the server, and orders them so the first ones can earn while the slower ones grow. Prices are starting points to test against competitors, not guarantees. This is a planning document, not legal, tax or financial advice.
 
 ---
 
@@ -19,7 +19,7 @@ Every area uses the same parts of the server, so each new venture adds content a
 
 | Shared part | Used by every area for |
 |---|---|
-| **Odoo Community** (multi-company: EFV, A La Mode, Ogun Tech Solutions, AP Project) | Products, orders, invoices, clients, projects, stock, with books kept per company |
+| **Odoo Community** (multi-company: EFV, Ogun Tech Solutions, AP Project; A La Mode doesn't sell, so it needs no company) | Products, orders, invoices, clients, projects, stock, with books kept per company |
 | **Odoo websites** | One shop or site per venture, on its own address |
 | **`learn.`** (Odoo eLearning + video host) | Courses and paid downloads from all four areas, in one catalogue |
 | **The guild** (Discord) | One community with a wing per area; purchases unlock rooms |
@@ -47,10 +47,20 @@ Every area uses the same parts of the server, so each new venture adds content a
 
 ---
 
-## 2. Fashion (A La Mode)
+## 2. Fashion (A La Mode): a studio, not a business
 
-| # | Business model | Who pays | Starting price to test | Runs on | First proof (90 days) |
-|---|---|---|---|---|---|
+A La Mode is **not a venture**. It's a learning studio: learning the craft from idea to sample, and making a handful of experimental collections that showcase creativity in fashion. **Nothing is for sale.**
+
+| What | How | On the server | First proof (90 days) |
+|---|---|---|---|
+| **Learning** | The learning path in `aLaMode-kb`: machine basics, a first commercial pattern, then drafting in Seamly2D | Nothing; it lives in the repo | First muslin and first finished piece |
+| **Collections** | Small, experimental groups of 3–8 looks around one idea, each with a brief, line plan and lookbook | — | First capsule collection (3 looks) finished and photographed |
+| **The showcase** | A static lookbook site built from the repo: each collection's idea, palette, looks and process | `alamode.techtheworld.win` (static; no Odoo, no payments) | The lookbook is live with the first collection |
+| **Sharing** | New collections posted to the guild and socials; optional free process write-ups on `learn.` | n8n posts | One collection shared |
+
+**How it helps the other areas:** the collections give EFV wardrobe and styling for its films and music videos, and the showcase is a creative portfolio alongside EFV's work. A La Mode adds almost no load to the server: one static site.
+
+---|---|---|---|---|---|
 | 2.1 | **Digital sewing patterns**: PDF patterns in several sizes, drafted in Seamly2D, with instructions | Home sewists worldwide | Typical indie pattern prices (roughly $10–20 each); bundles | `wear.` digital products, `learn.` for sew-along videos | 3 patterns published, first 50 sales |
 | 2.2 | **Made-to-order and custom pieces** | Clients who want fit, fabric or design choices | Priced from materials + hours + margin, with a deposit up front | Odoo Manufacturing (pattern → cutting → sewing → finishing as steps), `wear.` | 5 custom orders delivered |
 | 2.3 | **Used and vintage resale**, graded and photographed | Budget- and sustainability-minded buyers | Per piece | `wear.` one-off listings | 30 pieces sold |
@@ -109,19 +119,19 @@ Together these use about 0.3–0.6 GB. Private parcel and stakeholder layers sta
 
 | When | EFV | A La Mode | Ogun Tech Solutions | AP Project |
 |---|---|---|---|---|
-| **Months 0–3** | Tools beta (33 invites); 2 production clients | 3 digital patterns; used-clothing listings | 2 MSP clients; 3 assessments | GIS stack on the server; first site report |
-| **Months 3–6** | Tools paid; first course | Custom orders through Manufacturing; first class | First hosted client; tech shop | Public dashboard; first engagement |
-| **Months 6–12** | Blank copy licence; AI production packs | Capsule drop live; embroidery | Training course; template packs | Education series; grant packages |
+| **Months 0–3** | Tools beta (33 invites); 2 production clients | Machine basics; first pattern and muslin | 2 MSP clients; 3 assessments | GIS stack on the server; first site report |
+| **Months 3–6** | Tools paid; first course | First capsule collection; lookbook site live | First hosted client; tech shop | Public dashboard; first engagement |
+| **Months 6–12** | Blank copy licence; AI production packs | Second and third collections: new techniques, embroidery, 3D draping | Training course; template packs | Education series; grant packages |
 
-**Start with:** Ogun Tech managed IT and EFV production packages. They bring cash in fastest and cost almost nothing to start. Digital patterns and EFV Tools are the scalable products to build alongside them.
+**Start with:** Ogun Tech managed IT and EFV production packages. They bring cash in fastest and cost almost nothing to start. EFV Tools is the scalable product to build alongside them.
 
-**Measure every month, per area:**
+**Measure every month, per business area** (A La Mode is tracked by collections finished, not money):
 - revenue and the number of paying customers;
 - repeat customers;
 - hours spent;
 - one product metric each:
   - EFV: Tools subscribers;
-  - A La Mode: patterns sold;
+  - A La Mode: pieces finished and collections showcased;
   - Ogun Tech: clients on retainer;
   - AP Project: reports delivered.
 
@@ -133,7 +143,7 @@ n8n collects these numbers onto the `dash.` dashboard.
 
 - **Entities:** decide with an accountant whether each area is its own LLC or a trade name under one company. Odoo Community's multi-company setup keeps the books separate either way.
 - **Money:** a separate bank account and Stripe account (or Stripe account per company) for each entity, bookkeeping in Odoo, and sales tax handled for physical and digital products where you sell.
-- **Contracts:** standard agreements for production work, MSP clients (service levels, data handling), custom clothing (deposits, alterations) and consignment sellers.
+- **Contracts:** standard agreements for production work, MSP clients (service levels, data handling), and consignment sellers.
 - **Insurance:** general liability for in-person work and pop-ups; professional liability and cyber cover for the MSP work.
 - **AP Project:** licensed counsel before any real land, trust or investment structure; nothing beyond public data goes public.
 
@@ -146,7 +156,7 @@ The universe grows from one solar system into **four star systems**, one per are
 | System | Its worlds |
 |---|---|
 | EFV (a warm gold sun) | EFV, TOOLS, LEARN (creative courses), KB (hidden) |
-| A La Mode (a rose-white sun) | WEAR, pattern shop, custom atelier, LIVE drops |
+| A La Mode (a rose-white sun) | One world per collection, and the lookbook |
 | Ogun Tech Solutions (a blue-white sun) | SHOP, FINDS, IT services, DASH |
 | AP Project (a deep red giant) | Public dashboard, heritage and education, the digital twin |
 

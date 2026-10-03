@@ -40,7 +40,7 @@ Status: plan only. Nothing here is built yet. See *Still to confirm* at the end.
 | 7 | **Status page** | `status.techtheworld.win` | Your team |
 | 8 | **Management tools** (VS Code server, containers, databases, monitoring) | Tailscale only, no public address | You |
 | 9 | **Odoo** (Community edition): the back office and engine for every shop and the learning platform | `erp.techtheworld.win` | Your team (see *Odoo*) |
-| 10 | **Clothing shop**: new, used and custom clothes (an Odoo website) | `wear.techtheworld.win` | Anyone |
+| 10 | **Clothing shop**: new, used and custom clothes (an Odoo website). **On hold:** it was planned as A La Mode's shop, and A La Mode no longer sells (see *Still to confirm*) | `wear.techtheworld.win` | Anyone |
 | 11 | **Specialty marketplace**: niche new and used items that sellers submit; the shop handles pickup and payment (an Odoo website) | `finds.techtheworld.win` | Anyone; sellers submit items through a form |
 | 12 | **Live and hybrid shops**: live selling streams, plus pop-up and in-person sales on the same stock | `live.techtheworld.win` | Anyone |
 | 13 | **Archive and learning platform**: videos, documents and courses, a mix of YouTube, Scribd and Udemy | `learn.techtheworld.win` | Anyone for free content; members for paid courses |
@@ -48,6 +48,7 @@ Status: plan only. Nothing here is built yet. See *Still to confirm* at the end.
 | 15 | **EFV Sound**: streaming, physical sales and artist releases (see *The realms*) | `sound.techtheworld.win` | Anyone; subscribers for full-length hi-res streams |
 | 16 | **EFV Games**: browser games, demo downloads, mods and community | `games.techtheworld.win` | Anyone |
 | 17 | **EFV Film**: the project showcase | `film.techtheworld.win` | Anyone; pitch decks on request |
+| 18 | **A La Mode showcase**: a lookbook of A La Mode's collections, built from `aLaMode-kb`; nothing is for sale | `alamode.techtheworld.win` | Anyone |
 | — | **Landing page**: the interactive solar system | `techtheworld.win` and `www.` | Anyone |
 
 ### The landing page: a living solar system
@@ -61,7 +62,7 @@ Status: plan only. Nothing here is built yet. See *Still to confirm* at the end.
 | Red desert planet | **TOOLS** | Opens `tools.` |
 | Ringed gas giant | **SHOP** | Opens `shop.` (Ogun Tech Solutions) |
 | Ice planet | **DASH** | Opens `dash.` |
-| Rose and violet banded giant | **WEAR** | Opens `wear.` (clothing) |
+| Rose and violet banded giant | **A LA MODE** | Opens `alamode.` (the fashion showcase) |
 | Teal and ochre world with a swarm of tiny moons | **FINDS** | Opens `finds.` (specialty marketplace) |
 | Dark world lit by city lights, with a pulsing red *live* beacon | **LIVE** | Opens `live.` (live and pop-up shops) |
 | Huge ringed blue giant on the outer edge | **LEARN** | Opens `learn.` (archive and courses) |
@@ -280,6 +281,8 @@ Every venture starts as a **beta with low traffic**, behind its own address, and
 
 ### Clothing shop (`wear.`)
 
+**On hold.** This was A La Mode's shop. A La Mode is now a learning studio that showcases its collections at `alamode.` and doesn't sell, so `wear.` only goes ahead as its own venture if you decide to keep it. The design below stays for that case.
+
 - **New clothes:** products with size and colour variants and normal stock.
 - **Used clothes:** each piece is its own one-off listing with a condition grade (for example *like new*, *good*, *worn*) and its own photos. It sells once, then disappears.
 - **Custom clothes:** the buyer chooses options (garment, colour, print, text). The order becomes a manufacturing order in Odoo, with materials and steps, so you can track it from order to shipping.
@@ -450,3 +453,4 @@ Settings that keep it comfortable:
 4. **Marketplace terms:** your commission, how long items stay listed, the payout schedule, and the area you collect from.
 5. **Video host:** Bunny Stream or Cloudflare Stream.
 6. **Which Discord servers** to connect, and which purchases give which roles.
+7. **The clothing shop (`wear.`):** keep it as its own venture (and under which area), or drop it now that A La Mode is a showcase.
