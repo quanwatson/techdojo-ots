@@ -48,7 +48,7 @@ Status: plan only. Nothing here is built yet. See *Still to confirm* at the end.
 | 15 | **EFV Sound**: streaming, physical sales and artist releases (see *The realms*) | `sound.techtheworld.win` | Anyone; subscribers for full-length hi-res streams |
 | 16 | **EFV Games**: browser games, demo downloads, mods and community | `games.techtheworld.win` | Anyone |
 | 17 | **EFV Film**: the project showcase | `film.techtheworld.win` | Anyone; pitch decks on request |
-| 18 | **A La Mode showcase**: A La Mode's collections, a mock luxury boutique and an atelier customiser (2D and 3D), built from `aLaMode-kb`. Nothing can be bought; requests go to the atelier by contact | `alamode.techtheworld.win` | Anyone |
+| 18 | **A La Mode showcase**: a 3D flagship hall to walk through, with a classic store view, A La Mode's collections and an atelier customiser (2D and 3D), built from `aLaMode-kb`. Nothing can be bought; requests go to the atelier by contact | `alamode.techtheworld.win` | Anyone |
 | — | **Landing page**: the interactive solar system | `techtheworld.win` and `www.` | Anyone |
 
 ### The landing page: a living solar system
@@ -78,6 +78,7 @@ Status: plan only. Nothing here is built yet. See *Still to confirm* at the end.
 
 - **Adding a world:** each world is one entry in a list in the page (name, size, orbit, surface type, address). A new venture means a new entry, and a new world appears in the sky.
 - **The sky:** about 25,000 stars with real colour temperatures that twinkle, a Milky Way band and faint nebulae. Every planet surface is generated in the browser, so there are no image files to download.
+- **A live clock:** every world's position comes from the visitor's local time. EMBER is the second hand, EFV the minute hand and TOOLS the hour hand, with a dial of Roman numerals on the rim. The outer worlds turn once per day, week, month, moon phase, season, year and longer. The visitor's date and time show in the top left.
 - **Moving around:** drag to look around, scroll or pinch to zoom. Touch a world to fly to it; touch empty space or *Overview* to fly back. When left alone, the view drifts slowly round the system.
 - **The cipher:** the message at the top decodes as you go. Following the sun's clues (signal, echo, key) draws light between the worlds and brings the hidden archive planet into view. As before, it's decoration: `kb.` still requires GitHub sign-in.
 - **For everyone:** every world can be reached with Tab and Enter, with a label shown on the world itself. There's a plain *List view* of every link, sound stays off until switched on, and motion stops for people who turn off animation. Browsers without WebGL get the list automatically.
