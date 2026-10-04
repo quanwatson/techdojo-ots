@@ -87,6 +87,7 @@ The **owner repo** decides the content; this repo decides how the service runs. 
 | 2 | `sound.`, `games.`, `film.` | EFV realms | Public | efv-kb | Static, Caddy; Sound audio from R2 | (Caddy) | R2 |
 | 3 | `kb.` | EFV Library, full edition | Team | efv-kb | Static + Library API | 512 MB | Postgres `library` |
 | 4 | `tools.` | EFV Library, public edition | Members | efv-kb | Static + Library API | (shared) | Postgres `library` |
+| 4a | `kb.` and `tools.` at `/media-api/` | EFV Media Server: Transcriber and Media Grabber engine (yt-dlp, ffmpeg, optional Whisper); one container per edition | Team; Members after E4 | efv-kb (`deploy/media-server/`) | Docker, `edge` network, no published port | 4 GB each, 3 CPUs | volumes (files deleted after 24 h team / 4 h members) |
 | 5 | `efv.` | EFV website | Public | efv-kb | WordPress + MariaDB | 1 GB | MariaDB `efv_wp` |
 | 6 | `erp.` | Odoo back office | Team | techdojo-ots | Odoo Community | 6 GB | Postgres `odoo` |
 | 7 | `shop.` | Ogun Tech Solutions store + EFV merch | Public | techdojo-ots | Odoo website | (Odoo) | Postgres `odoo` |
