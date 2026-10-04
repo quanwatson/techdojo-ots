@@ -36,7 +36,7 @@ Every area uses the same parts of the server, so each new venture adds content a
 
 | Shared part | Used by every area for |
 |---|---|
-| **Odoo Community** (multi-company: EFV, Ogun Tech Solutions, AP Project; A La Mode doesn't sell, so it needs no company) | Products, orders, invoices, clients, projects, stock, with books kept per company |
+| **Odoo Community** (multi-company: Malkuth Holdings Co with one company or analytic account per series as each opens, plus OTS while it operates separately; A La Mode needs one only if it sells; AP Project kept separate) | Products, orders, invoices, clients, projects, stock, with books kept per company |
 | **Odoo websites** | One shop or site per venture, on its own address |
 | **`learn.`** (Odoo eLearning + video host) | Courses and paid downloads from all four areas, in one catalogue |
 | **The guild** (Discord) | One community with a wing per area; purchases unlock rooms |
@@ -65,6 +65,8 @@ Every area uses the same parts of the server, so each new venture adds content a
 ---
 
 ## 2. Fashion (A La Mode): a studio, not a business
+
+> A La Mode is series 03 in the enterprise structure (tme-kb D-0006), with a start-up plan for selling commissions and pre-orders. Until the founder confirms it sells, the studio-not-a-business plan below stands.
 
 A La Mode is **not a venture**. It's a learning studio: learning the craft from idea to sample, and making a handful of experimental collections that showcase creativity in fashion. **Nothing is for sale.**
 
@@ -158,7 +160,7 @@ n8n collects these numbers onto the `dash.` dashboard.
 
 ## Running four businesses properly (basics, not advice)
 
-- **Entities:** decide with an accountant whether each area is its own LLC or a trade name under one company. Odoo Community's multi-company setup keeps the books separate either way.
+- **Entities:** decided 2026-10-03 (tme-kb D-0006): Malkuth Enterprise Trust Co. owns Malkuth Holdings Co, a series LLC with twelve series (EFV MEDIA is 01, OGUN TECH 02, A La Mode 03). Nothing is formed yet; Phase 1 is the trust and Holdings (D-0007). OTS operates now as the founder's existing LLC. Odoo Community's multi-company setup keeps the books separate either way.
 - **Money:** a separate bank account and Stripe account (or Stripe account per company) for each entity, bookkeeping in Odoo, and sales tax handled for physical and digital products where you sell.
 - **Contracts:** standard agreements for production work, MSP clients (service levels, data handling), and consignment sellers.
 - **Insurance:** general liability for in-person work and pop-ups; professional liability and cyber cover for the MSP work.
@@ -183,7 +185,7 @@ You'd fly between systems, and each opens into its own worlds.
 
 ## Decisions needed
 
-1. **Entities:** one company with trade names, or a company per area.
+1. ~~**Entities:** one company with trade names, or a company per area.~~ Decided: trust → Malkuth Holdings Co (series LLC) → twelve series (tme-kb D-0006).
 2. **Which two models to start** (suggested: Ogun Tech managed IT and EFV production packages).
 3. **The technology knowledge base's name:** you called it *techtheworld-ots*; the repository is `techdojo-ots`. Rename it, or keep the name?
 4. **The landing page:** build the four-system universe now, or after the first ventures launch.
